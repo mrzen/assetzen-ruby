@@ -7,7 +7,7 @@ def mock(method, path)
     status: 200,
     body: mock_body(method, path),
     headers: {
-      'Content-Type': mock_content_type_for(path)
+      'Content-Type' => mock_content_type_for(path)
     }
   )
 end
