@@ -42,5 +42,39 @@ describe AssetZen::API::Client do
     end
   end
 
+  describe '#class_for' do
+    before(:all) do
+      @client = mock_client
+    end
 
+    context 'when an invalid verb is given' do
+      it 'raises an error' do
+        expect{ @client.class_for('INVALID') }.to raise_error ArgumentError
+      end
+    end
+
+    context 'when the method is \'GET\'' do
+      it 'returns Net::HTTP::Get' do
+        expect(@client.class_for 'GET').to eq Net::HTTP::Get
+      end
+    end
+
+    context 'when the method is \'POST\'' do
+      it 'returns Net::HTTP::Post' do
+        expect(@client.class_for 'POST').to eq Net::HTTP::Post
+      end
+    end
+
+    context 'when the method is \'PATCH\'' do
+      it 'returns Net::HTTP::Patch' do
+        expect(@client.class_for 'PATCH').to eq Net::HTTP::Patch
+      end
+    end
+
+    context 'when the method is \'HEAD\'' do
+      it 'returns Net::HTTP::Head' do
+        expect(@client.class_for 'HEAD').to eq Net::HTTP::Head
+      end
+    end
+  end
 end
