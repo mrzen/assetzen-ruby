@@ -14,7 +14,7 @@ module AssetZen
         url.path = '/image/' + self[:sid] + '/'
 
         params = params.to_json
-        url_params = Base64.urlsafe_encode64(params, padding: false)
+        url_params = Base64.urlsafe_encode64(params).gsub(/=/,'')
 
         url.path += sign_params(params, account[:id]) + '.' + url_params
 
@@ -29,7 +29,7 @@ module AssetZen
         digest = OpenSSL::Digest.new('sha256')
         signature = OpenSSL::HMAC.digest(digest, key, params)
 
-        Base64.urlsafe_encode64(signature, padding: false)
+        Base64.urlsafe_encode64(signature).gsub(/=/, '')
       end
     end
   end
