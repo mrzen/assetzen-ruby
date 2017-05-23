@@ -8,6 +8,13 @@ module AssetZen
 
         @client = client
       end
+
+      def method_missing(method, args = nil)
+        if method =~ /\=$/
+        else
+          self[method]
+        end
+      end
     end
   end
 end

@@ -153,6 +153,31 @@ module AssetZen
       end
 
       ##
+      # HTTP Put Helper
+      #
+      # @see AssetZen::API::Client#request
+      #
+      def put(path, params = {}, headers = {})
+        resp = request('PUT', path, params, headers)
+
+        yield(resp) if block_given?
+
+        resp
+      end
+
+      ##
+      # HTTP Patch Helper
+      #
+      # @see AssetZen::API::Client#request
+      def patch(path, params = {}, headers = {})
+        resp = request('PATCH', path, params, headers)
+
+        yield(resp) if block_given?
+
+        resp
+      end
+
+      ##
       # Get class for HTTP Request based on Method
       #
       # @param [String] method HTTP Method

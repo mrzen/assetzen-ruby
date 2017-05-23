@@ -7,6 +7,32 @@ module AssetZen
     #
     # Represents a single image from the library
     class Image < Base
+
+      ##
+      # Save the image
+      def save
+        if self[:id]
+          resp = @client.patch('/images/' + self[:sid], self)
+        else
+          resp = @client.put('/images', self)
+        end
+
+        # Merge saved data with our data
+        data = JSON.load(resp.body)
+        merge! self.class.new(data)
+
+        self
+      end
+
+      ##
+      # Get a signed link to the image
+      #
+      # Returns a signed URL to the image with the given parameters.
+      #
+      # @param [Hash] params Image parameters
+      # @param [String] host Image Host
+      #
+      # @return [URI] Image link
       def signed_link(params = {}, host = nil)
         account = @client.account
 
