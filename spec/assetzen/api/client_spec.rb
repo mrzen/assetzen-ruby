@@ -42,6 +42,36 @@ describe AssetZen::API::Client do
     end
   end
 
+  describe '#image' do
+    context 'with a valid id' do
+      before(:each) do
+        @client = mock_client
+        mock(:get, '/images/example')
+      end
+
+      it 'returns an image' do
+        image = @client.image 'example'
+        expect(image).to be_an AssetZen::Resources::Image
+      end
+
+      it 'has the expected id' do
+        image = @client.image 'example'
+        expect(image.sid).to eq 'example'
+      end
+    end
+
+    context 'with an invalid id' do
+      before(:each) do
+        @client = mock_client
+        stub_request(:get, 'https://app.assetzen.net/images/example').to_return(status: 404)
+      end
+
+      it 'throws an error' do
+        expect {@client.image 'example'}.to raise_error Net::HTTPServerException
+      end
+    end
+  end
+
   describe '#class_for' do
     before(:all) do
       @client = mock_client

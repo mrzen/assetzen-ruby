@@ -47,5 +47,14 @@ images = @client.images(q: 'food')
   image_tag href: url
 ~~~~
 
+### Updating an Image
+
+~~~~ruby
+  @client = some_method_to_get_client # see first example
+  image = @client.image('example') # get image with ID 'example'
+
+  image.title = "My new image title"
+  image.save
+~~~~
 
 [az]: http://assetzen.net/
