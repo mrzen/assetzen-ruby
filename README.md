@@ -24,6 +24,13 @@ Installation
 Usage
 -----
 
+You will need to [create an application](https://app.assetzen.net/oauth/applications/new)
+in order to use the API. You will also need to get and store a user access grant
+in order to make API calls. This is not handled by the library as it is specific
+to the application, as you will need to provide a callback in your application to
+redirect the user once they approve authorization, and a secure storage mechanism for
+the granted tokens.
+
 ### Searching Images
 
 ~~~~ruby

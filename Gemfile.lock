@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     assetzen (0.1.0.pre)
+      multipart-post (~> 2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -23,6 +24,7 @@ GEM
     hashdiff (0.3.4)
     json (2.1.0)
     method_source (0.8.2)
+    multipart-post (2.0.0)
     parser (2.4.0.0)
       ast (~> 2.2)
     powerpack (0.1.1)

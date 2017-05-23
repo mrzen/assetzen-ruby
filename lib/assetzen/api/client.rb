@@ -1,6 +1,11 @@
 require 'net/http'
+require 'net/http/post/multipart'
 require 'logger'
 
+require_relative 'images'
+
+##
+# AssetZen
 module AssetZen
   module API
     ##
@@ -25,8 +30,11 @@ module AssetZen
       attr_writer :user_agent
       attr_writer :logger
       attr_accessor :credentials
+      attr_reader :proxy
 
       BASE_URL = 'https://app.assetzen.net/'.freeze
+
+      include Images
 
       ##
       # Create a new API Client
@@ -37,8 +45,17 @@ module AssetZen
 
         @connection = Net::HTTP.new(base_uri.host, base_uri.port)
         @connection.use_ssl = (base_uri.scheme == 'https')
+        @connection.set_debug_output @logger
 
         yield(self) if block_given?
+      end
+
+      ##
+      # Set a proxy
+      #
+      # Sets an HTTP proxy to use for API interactions.
+      # This can be useful for debugging or strict audit logging.
+      def proxy=(val)
       end
 
       ##
@@ -59,29 +76,6 @@ module AssetZen
         get('/account') do |resp|
           return AssetZen::Resources::Account.new(JSON.parse(resp.body), dup)
         end
-      end
-
-      ##
-      # Get images
-      #
-      # @return [Array[AssetZen::Resources::Image]] Matching images
-      def images(q = {})
-        get('/images', q) do |resp|
-          return JSON.parse(resp.body).collect do |image_data|
-            AssetZen::Resources::Image.new(image_data, dup)
-          end
-        end
-      end
-
-      ##
-      # Get an image by ID
-      #
-      # @param [String] id Image ID
-      # @return [AssetZen::Resources::Image] Image
-      def image(id)
-        resp = get('/images/'+id)
-        resp.value
-        return AssetZen::Resources::Image.new(JSON.parse(resp.body), dup)
       end
 
       ##
@@ -111,10 +105,6 @@ module AssetZen
       #
       # @return [Net::HTTPResponse] HTTP Response
       def request(method, path, params = {}, headers = {})
-        headers['User-Agent'] = user_agent
-        headers['X-Runtime'] = runtime_info
-        headers['Accept'] ||= 'application/json'
-
         uri = URI(BASE_URL)
         uri.path = path
 
@@ -125,9 +115,6 @@ module AssetZen
         end
 
         req = req_class.new uri
-        headers.each do |header, value|
-          req[header] = value
-        end
 
         if req.request_body_permitted?
           case params.class
@@ -140,13 +127,7 @@ module AssetZen
           end
         end
 
-        resp = @connection.request req
-
-        @logger.debug "#{method.to_s.upcase} #{uri} #{resp.code}"
-
-        yield(resp) if block_given?
-
-        resp
+        perform_request(req, headers)
       end
 
       ##
@@ -209,6 +190,30 @@ module AssetZen
         else
           raise ArgumentError, "Invalid HTTP method #{method}"
         end
+      end
+
+      ##
+      # Perform a request
+      #
+      # Used for things like multipart where a custom request builder is required.
+      #
+      def perform_request(req, headers = {})
+        headers['User-Agent'] = user_agent
+        headers['X-Runtime'] = runtime_info
+        headers['Accept'] ||= 'application/json'
+        headers['Authorization'] = "Bearer #{@credentials}"
+
+        headers.each do |header, value|
+          req[header] = value
+        end
+
+        resp = @connection.request req
+
+        @logger.debug "#{req.class.name} #{req.uri} #{resp.code}"
+
+        yield(resp) if block_given?
+
+        resp
       end
     end
   end

@@ -16,6 +16,38 @@ describe AssetZen::Resources::Image do
     end
   end
 
+  describe '#upload' do
+    before(:each) do
+      @image = AssetZen::Resources::Image.new({
+        title: "Example Image"
+        }, mock_client)
+    end
+
+    context 'without a valid source' do
+      it 'raises an error' do
+        expect{@image.upload_sync("foo")}.to raise_error ArgumentError
+      end
+    end
+
+    context 'with a valid source' do
+      before(:each) do
+        stub_request(:put, 'https://app.assetzen.net/images').with(
+          :headers => {
+            'Content-Type' => /^multipart\/form-data; boundary=/
+          }
+        ).to_return(
+          :headers => {
+            'Content-Type' => 'application/json',
+          },
+          'body' => mock_body(:put, '/images')
+        )
+      end
+      it 'performs a multipart post' do
+        @image.upload_sync(UploadIO.new(StringIO.new, "image/jpeg", "test.jpg"))
+      end
+    end
+  end
+
   describe '#save' do
     context 'on a new image' do
       before(:each) do
@@ -59,7 +91,6 @@ describe AssetZen::Resources::Image do
         expect(new_sid).to eq old_sid
       end
     end
-
   end
 
 end

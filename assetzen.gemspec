@@ -22,6 +22,8 @@ DESC
 
   gem.required_ruby_version = '>= 1.9.3'
 
+  gem.add_dependency('multipart-post', '~> 2.0')
+
   gem.add_development_dependency('webmock', '> 0')
   gem.add_development_dependency('rdoc', '> 0')
   gem.add_development_dependency('rspec', '> 0')
