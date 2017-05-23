@@ -1,4 +1,3 @@
-require_relative '../lib/assetzen'
 require 'webmock/rspec'
 
 require 'simplecov'
@@ -12,6 +11,8 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
 SimpleCov.start do
   add_filter '/spec/'
 end
+
+require_relative '../lib/assetzen'
 
 # Allow us to send coverage reports to coveralls.
 WebMock.disable_net_connect!(:allow => 'coveralls.io')
