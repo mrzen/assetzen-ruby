@@ -28,4 +28,6 @@ DESC
   gem.add_development_dependency('yard', '> 0')
   gem.add_development_dependency('rubocop', '> 0')
   gem.add_development_dependency('pry', '> 0')
+  gem.add_development_dependency('coveralls', '> 0')
+  gem.add_development_dependency('simplecov', '> 0')
 end

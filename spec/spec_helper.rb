@@ -1,6 +1,20 @@
 require_relative '../lib/assetzen'
 require 'webmock/rspec'
 
+require 'simplecov'
+require 'coveralls'
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
+  [SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter]
+)
+
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
+# Allow us to send coverage reports to coveralls.
+WebMock.disable_net_connect!(:allow => 'coveralls.io')
 
 def mock(method, path)
   stub_request(method, 'https://app.assetzen.net'+path).to_return(
