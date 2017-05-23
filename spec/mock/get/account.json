@@ -1,0 +1,7 @@
+{
+  "name": "Example Account",
+  "id": "123456789ABC",
+  "settings": {
+    "images_service": "https://cdn.assetzen.net/"
+  }
+}
