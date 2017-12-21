@@ -1,6 +1,8 @@
 require 'net/http'
 require 'net/http/post/multipart'
+require 'oauth2'
 require 'logger'
+require 'yaml'
 
 require_relative 'images'
 
@@ -31,6 +33,7 @@ module AssetZen
       attr_writer :logger
       attr_accessor :credentials
       attr_reader :proxy
+      attr_reader :token
 
       BASE_URL = 'https://app.assetzen.net/'.freeze
 
@@ -38,24 +41,17 @@ module AssetZen
 
       ##
       # Create a new API Client
+      #
+      # @param app_id [String] App ID
+      # @param app_secret [String] App Secret
       def initialize
         @logger = Logger.new STDOUT
+        
+        @credentials = OAuth2::Client.new(app_id, app_secret)
 
         base_uri = URI(BASE_URL)
 
-        @connection = Net::HTTP.new(base_uri.host, base_uri.port)
-        @connection.use_ssl = (base_uri.scheme == 'https')
-        @connection.set_debug_output @logger
-
         yield(self) if block_given?
-      end
-
-      ##
-      # Set a proxy
-      #
-      # Sets an HTTP proxy to use for API interactions.
-      # This can be useful for debugging or strict audit logging.
-      def proxy=(val)
       end
 
       ##
@@ -201,7 +197,7 @@ module AssetZen
         headers['User-Agent'] = user_agent
         headers['X-Runtime'] = runtime_info
         headers['Accept'] ||= 'application/json'
-        headers['Authorization'] = "Bearer #{@credentials}"
+        headers['Authorization'] = "Bearer #{@credentials.token}"
 
         headers.each do |header, value|
           req[header] = value

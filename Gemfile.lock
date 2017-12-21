@@ -3,6 +3,7 @@ PATH
   specs:
     assetzen (0.1.0.pre)
       multipart-post (~> 2.0)
+      oauth2 (~> 1.4)
 
 GEM
   remote: https://rubygems.org/
@@ -21,18 +22,31 @@ GEM
       safe_yaml (~> 1.0.0)
     diff-lcs (1.3)
     docile (1.1.5)
+    faraday (0.12.1)
+      multipart-post (>= 1.2, < 3)
     hashdiff (0.3.4)
     json (2.1.0)
+    jwt (1.5.6)
     method_source (0.8.2)
+    multi_json (1.12.1)
+    multi_xml (0.6.0)
     multipart-post (2.0.0)
+    oauth2 (1.4.0)
+      faraday (>= 0.8, < 0.13)
+      jwt (~> 1.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 3)
+    parallel (1.11.2)
     parser (2.4.0.0)
       ast (~> 2.2)
     powerpack (0.1.1)
-    pry (0.10.3)
+    pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
     public_suffix (2.0.5)
+    rack (2.0.3)
     rainbow (2.2.2)
       rake
     rake (12.0.0)
@@ -50,7 +64,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
-    rubocop (0.48.1)
+    rubocop (0.49.1)
+      parallel (~> 1.10)
       parser (>= 2.3.3.1, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
@@ -69,7 +84,7 @@ GEM
     thor (0.19.4)
     tins (1.14.0)
     unicode-display_width (1.2.1)
-    webmock (2.3.2)
+    webmock (3.0.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -91,4 +106,4 @@ DEPENDENCIES
   yard (> 0)
 
 BUNDLED WITH
-   1.14.5
+   1.15.1

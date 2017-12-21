@@ -42,6 +42,10 @@ end
 
 def mock_client
   c = AssetZen::API::Client.new
-  c.logger = Logger.new('/dev/null')
+  c.credentials = AssetZen::API::Credentials.new
+  c.credentials.app_id = 1
+  c.credentials.app_secret = 1
+  c.credentials.auth_code = 1
+  c.logger = Logger.new(STDOUT)
   c
 end
